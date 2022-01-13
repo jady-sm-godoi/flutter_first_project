@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:udemy_expenses/components/chart.dart';
 import 'components/transaction_form.dart';
 import 'components/transactions_list.dart';
@@ -51,6 +52,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _transactions = [];
+  bool _showChart = false;
 
   List<Transaction> get _recentTransactions {
     return _transactions
@@ -105,11 +107,24 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+
     final appBar = AppBar(
       title: Text(
         'My Expenses',
+        style: TextStyle(
+          fontSize: 20 * MediaQuery.of(context).textScaleFactor,
+        ),
       ),
       actions: [
+        if (isLandscape)
+          IconButton(
+            onPressed: () => setState(() {
+              _showChart = !_showChart;
+            }),
+            icon: Icon(_showChart ? Icons.list_outlined : Icons.bar_chart),
+          ),
         IconButton(
           onPressed: () => _openTransactionFormModal(context),
           icon: Icon(Icons.add),
@@ -128,17 +143,34 @@ class _MyHomePageState extends State<MyHomePage> {
           // mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              height: availableHeight * 0.3,
-              child: Chart(recentTransaction: _recentTransactions),
-            ),
-            Container(
-              height: availableHeight * 0.7,
-              child: TransactionsList(
-                transactions: _transactions,
-                onRemove: _removeTransaction,
+            // if (isLandscape)
+            //   Row(
+            //     mainAxisAlignment: MainAxisAlignment.center,
+            //     children: [
+            //       Text("Exibir gráfico"),
+            //       Switch(
+            //         value: _showChart,
+            //         onChanged: (value) {
+            //           setState(() {
+            //             _showChart = value;
+            //           });
+            //         },
+            //       ),
+            //     ],
+            //   ),
+            if (_showChart || !isLandscape)
+              Container(
+                height: availableHeight * (isLandscape ? 0.7 : 0.3),
+                child: Chart(recentTransaction: _recentTransactions),
               ),
-            ),
+            if (!_showChart || !isLandscape)
+              Container(
+                height: availableHeight * 0.7,
+                child: TransactionsList(
+                  transactions: _transactions,
+                  onRemove: _removeTransaction,
+                ),
+              ),
           ],
         ),
       ),
