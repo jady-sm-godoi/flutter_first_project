@@ -1,8 +1,8 @@
 import 'dart:math';
 import 'dart:ui';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:udemy_expenses/components/chart.dart';
 import 'components/transaction_form.dart';
 import 'components/transactions_list.dart';
@@ -138,46 +138,51 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
       appBar: appBar,
-      body: SingleChildScrollView(
-        child: Column(
-          // mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // if (isLandscape)
-            //   Row(
-            //     mainAxisAlignment: MainAxisAlignment.center,
-            //     children: [
-            //       Text("Exibir gráfico"),
-            //       Switch(
-            //         value: _showChart,
-            //         onChanged: (value) {
-            //           setState(() {
-            //             _showChart = value;
-            //           });
-            //         },
-            //       ),
-            //     ],
-            //   ),
-            if (_showChart || !isLandscape)
-              Container(
-                height: availableHeight * (isLandscape ? 0.75 : 0.3),
-                child: Chart(recentTransaction: _recentTransactions),
-              ),
-            if (!_showChart || !isLandscape)
-              Container(
-                height: availableHeight * (isLandscape ? 1 : 0.58),
-                child: TransactionsList(
-                  transactions: _transactions,
-                  onRemove: _removeTransaction,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            // mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // if (isLandscape)
+              //   Row(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     children: [
+              //       Text("Exibir gráfico"),
+              //       Switch.adaptive(
+              //         activeColor: Theme.of(context).primaryColor,
+              //         value: _showChart,
+              //         onChanged: (value) {
+              //           setState(() {
+              //             _showChart = value;
+              //           });
+              //         },
+              //       ),
+              //     ],
+              //   ),
+              if (_showChart || !isLandscape)
+                Container(
+                  height: availableHeight * (isLandscape ? 0.75 : 0.3),
+                  child: Chart(recentTransaction: _recentTransactions),
                 ),
-              ),
-          ],
+              if (!_showChart || !isLandscape)
+                Container(
+                  height: availableHeight * (isLandscape ? 1 : 0.58),
+                  child: TransactionsList(
+                    transactions: _transactions,
+                    onRemove: _removeTransaction,
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _openTransactionFormModal(context),
-        child: Icon(Icons.add),
-      ),
+      floatingActionButton: Platform.isIOS
+          ? Container()
+          : FloatingActionButton(
+              onPressed: () => _openTransactionFormModal(context),
+              child: Icon(Icons.add),
+            ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
