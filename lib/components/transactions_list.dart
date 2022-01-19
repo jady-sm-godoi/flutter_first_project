@@ -13,22 +13,22 @@ class TransactionsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
         height: 480,
         child: transactions.isEmpty
             ? LayoutBuilder(
                 builder: (ctx, constraints) {
                   return Column(
                     children: [
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Text(
                         'Não há transações, ainda...',
                         style: Theme.of(context).textTheme.headline6,
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Container(
                           height: constraints.maxHeight * 0.6,
-                          padding: EdgeInsets.all(20),
+                          padding: const EdgeInsets.all(20),
                           child: Image.asset(
                             'assets/images/waiting.png',
                             fit: BoxFit.cover,
@@ -43,7 +43,7 @@ class TransactionsList extends StatelessWidget {
                   final tr = transactions[index];
                   return Card(
                     elevation: 6,
-                    margin: EdgeInsets.symmetric(
+                    margin: const EdgeInsets.symmetric(
                       vertical: 7,
                       horizontal: 5,
                     ),

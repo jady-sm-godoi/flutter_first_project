@@ -8,7 +8,7 @@ import 'components/transaction_form.dart';
 import 'components/transactions_list.dart';
 import 'models/transaction.dart';
 
-main() => runApp(ExpensesApp());
+main() => runApp(const ExpensesApp());
 
 class ExpensesApp extends StatelessWidget {
   const ExpensesApp({Key? key}) : super(key: key);
@@ -21,16 +21,16 @@ class ExpensesApp extends StatelessWidget {
         accentColor: Colors.amber,
         fontFamily: 'Quicksand',
         textTheme: ThemeData.light().textTheme.copyWith(
-              headline6: TextStyle(
+              headline6: const TextStyle(
                   fontFamily: 'OpenSans',
                   fontSize: 15,
                   fontWeight: FontWeight.bold),
-              button: TextStyle(
+              button: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),
             ),
-        appBarTheme: AppBarTheme(
+        appBarTheme: const AppBarTheme(
           titleTextStyle: TextStyle(
             fontFamily: 'OpenSans',
             fontSize: 20,
@@ -44,7 +44,7 @@ class ExpensesApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key}) : super(key: key);
+  const MyHomePage({Key? key}) : super(key: key);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -56,8 +56,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<Transaction> get _recentTransactions {
     return _transactions
-        .where(
-            (tr) => tr.date.isAfter(DateTime.now().subtract(Duration(days: 7))))
+        .where((tr) =>
+            tr.date.isAfter(DateTime.now().subtract(const Duration(days: 7))))
         .toList();
   }
 
@@ -76,6 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.of(context).pop();
   }
 
+  // ignore: unused_element
   _editTransaction(String id, String title, double value, DateTime date) {
     final editedTransaction = Transaction(
       id: id,
@@ -127,7 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         IconButton(
           onPressed: () => _openTransactionFormModal(context),
-          icon: Icon(Icons.add),
+          icon: const Icon(Icons.add),
         ),
       ],
     );
@@ -161,12 +162,12 @@ class _MyHomePageState extends State<MyHomePage> {
               //     ],
               //   ),
               if (_showChart || !isLandscape)
-                Container(
+                SizedBox(
                   height: availableHeight * (isLandscape ? 0.75 : 0.3),
                   child: Chart(recentTransaction: _recentTransactions),
                 ),
               if (!_showChart || !isLandscape)
-                Container(
+                SizedBox(
                   height: availableHeight * (isLandscape ? 1 : 0.58),
                   child: TransactionsList(
                     transactions: _transactions,
@@ -181,7 +182,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ? Container()
           : FloatingActionButton(
               onPressed: () => _openTransactionFormModal(context),
-              child: Icon(Icons.add),
+              child: const Icon(Icons.add),
             ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
